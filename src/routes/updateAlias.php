@@ -25,14 +25,16 @@ $app->post('/api/AmazonLambda/updateAlias', function ($request, $response, $args
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+        'Name' => $post_data['args']['aliasName'],
+        'Description' => $post_data['args']['description']
+    ];
+    if (isset($post_data['args']['functionVersion']) && strlen($post_data['args']['functionVersion']) > 0) {
+        $requestArray['FunctionVersion'] = $post_data['args']['functionVersion'];
+    }
     try {
-        $awsResult = $client->updateAlias(
-            ['FunctionName' => $post_data['args']['functionName'],
-                'Name' => $post_data['args']['aliasName'],
-                'FunctionVersion' => $post_data['args']['functionVersion'],
-                'Description' => $post_data['args']['description']
-            ]
-        );
+        $awsResult = $client->updateAlias($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {

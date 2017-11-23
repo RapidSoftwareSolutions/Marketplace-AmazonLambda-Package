@@ -27,13 +27,14 @@ $app->post('/api/AmazonLambda/publishVersion', function ($request, $response, $a
     );
     $requestArray = [
         'FunctionName' => $post_data['args']['functionName'],
-        'CodeSha256' => $post_data['args']['codeSha256'],
         'Description' => $post_data['args']['description']
     ];
-    try {
-        $awsResult = $client->publishVersion($requestArray
+    if (isset($post_data['args']['codeSha256']) && $post_data['args']['v'] > 0) {
+        $requestArray['CodeSha256'] = $post_data['args']['codeSha256'];
+    }
 
-        );
+    try {
+        $awsResult = $client->publishVersion($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {
