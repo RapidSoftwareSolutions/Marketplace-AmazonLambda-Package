@@ -8,7 +8,7 @@
     "API"
   ],
   "accounts": {
-    "domain": "amazon.com",
+    "domain": "https://aws.amazon.com/lambda/",
     "credentials": [
       "apiKey",
       "apiSecret"

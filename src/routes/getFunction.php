@@ -25,19 +25,21 @@ $app->post('/api/AmazonLambda/getFunction', function ($request, $response, $args
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+    ];
+    if (isset($post_data['args']['qualifier']) && strlen($post_data['args']['qualifier']) > 0) {
+        $requestArray['Qualifier'] = $post_data['args']['qualifier'];
+    }
     try {
-        $awsResult = $client->getFunction(
-            ['FunctionName' => $post_data['args']['functionName'],
-                'Qualifier' => $post_data['args']['qualifier']
-            ]
-        );
+        $awsResult = $client->getFunction($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'API_ERROR';
         $result['contextWrites']['to']['status_msg'] = $exception->getMessage();
-    } catch (Aws\Lambda\Exception\LambdaException $exception){
+    } catch (Aws\Lambda\Exception\LambdaException $exception) {
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'API_ERROR';
         $result['contextWrites']['to']['status_msg'] = $exception->getMessage();

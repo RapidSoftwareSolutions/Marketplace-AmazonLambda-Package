@@ -25,16 +25,19 @@ $app->post('/api/AmazonLambda/addPermission', function ($request, $response, $ar
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+        'StatementId' => $post_data['args']['statementId'],
+        'Action' => $post_data['args']['action'],
+        'Principal' => $post_data['args']['principal'],
+        'SourceArn' => $post_data['args']['sourceArn'],
+        'SourceAccount' => $post_data['args']['sourceAccount']
+    ];
+    if (isset($post_data['args']['qualifier']) && strlen($post_data['args']['qualifier']) > 0) {
+        $requestArray['Qualifier'] = $post_data['args']['qualifier'];
+    }
     try {
-        $awsResult = $client->addPermission(
-            ['FunctionName' => $post_data['args']['functionName'],
-                'StatementId' => $post_data['args']['statementId'],
-                'Action' => $post_data['args']['action'],
-                'Principal' => $post_data['args']['principal'],
-                'SourceArn' => $post_data['args']['sourceArn'],
-                'SourceAccount' => $post_data['args']['sourceAccount'],
-                'Qualifier' => $post_data['args']['qualifier']
-            ]
+        $awsResult = $client->addPermission($requestArray
         );
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
@@ -42,7 +45,7 @@ $app->post('/api/AmazonLambda/addPermission', function ($request, $response, $ar
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'API_ERROR';
         $result['contextWrites']['to']['status_msg'] = $exception->getMessage();
-    } catch (Aws\Lambda\Exception\LambdaException $exception){
+    } catch (Aws\Lambda\Exception\LambdaException $exception) {
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'API_ERROR';
         $result['contextWrites']['to']['status_msg'] = $exception->getMessage();

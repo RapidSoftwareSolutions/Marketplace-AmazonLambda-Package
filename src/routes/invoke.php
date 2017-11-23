@@ -25,17 +25,19 @@ $app->post('/api/AmazonLambda/invoke', function ($request, $response, $args) {
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+        'InvocationType' => $post_data['args']['invocationType'],
+        'LogType' => $post_data['args']['logType'],
+        'ClientContext' => $post_data['args']['clientContext'],
+        'Payload' => $post_data['args']['payload'],
+    ];
+    if (isset($post_data['args']['qualifier']) && strlen($post_data['args']['qualifier']) > 0) {
+        $requestArray['Qualifier'] = $post_data['args']['qualifier'];
+    }
     try {
-        $awsResult = $client->invoke(
-            [
-                'FunctionName' => $post_data['args']['functionName'],
-                'InvocationType' => $post_data['args']['invocationType'],
-                'LogType' => $post_data['args']['logType'],
-                'ClientContext' => $post_data['args']['clientContext'],
-                'Payload' => $post_data['args']['payload'],
-                'Qualifier' => $post_data['args']['qualifier']
-            ]
-        );
+        $awsResult = $client->invoke($requestArray);
+
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {

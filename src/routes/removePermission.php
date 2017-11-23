@@ -27,13 +27,14 @@ $app->post('/api/AmazonLambda/removePermission', function ($request, $response, 
     );
     $requestArray = [
         'FunctionName' => $post_data['args']['functionName'],
-        'StatementId' => $post_data['args']['statementId'],
-        'Qualifier' => $post_data['args']['qualifier']
+        'StatementId' => $post_data['args']['statementId']
     ];
-    try {
-        $awsResult = $client->removePermission($requestArray
+    if (isset($post_data['args']['qualifier']) && strlen($post_data['args']['qualifier']) > 0) {
+        $requestArray['Qualifier'] = $post_data['args']['qualifier'];
+    }
 
-        );
+    try {
+        $awsResult = $client->removePermission($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {

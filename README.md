@@ -2,7 +2,7 @@
 
 # AmazonLambda Package
 AWS Lambda is a compute service that lets you run code without provisioning or managing servers.
-* Domain: [AmazonLambda](http://amazon.com)
+* Domain: [AmazonLambda](https://aws.amazon.com/lambda/)
 * Credentials: apiKey, apiSecret
 
 ## How to get credentials: 

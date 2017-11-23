@@ -25,12 +25,14 @@ $app->post('/api/AmazonLambda/getFunctionConfiguration', function ($request, $re
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+    ];
+    if (isset($post_data['args']['qualifier']) && strlen($post_data['args']['qualifier']) > 0) {
+        $requestArray['Qualifier'] = $post_data['args']['qualifier'];
+    }
     try {
-        $awsResult = $client->getFunctionConfiguration(
-            ['FunctionName' => $post_data['args']['functionName'],
-                'Qualifier' => $post_data['args']['qualifier']
-            ]
-        );
+        $awsResult = $client->getFunctionConfiguration($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {
