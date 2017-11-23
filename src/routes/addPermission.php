@@ -29,12 +29,15 @@ $app->post('/api/AmazonLambda/addPermission', function ($request, $response, $ar
         'FunctionName' => $post_data['args']['functionName'],
         'StatementId' => $post_data['args']['statementId'],
         'Action' => $post_data['args']['action'],
-        'Principal' => $post_data['args']['principal'],
-        'SourceArn' => $post_data['args']['sourceArn'],
-        'SourceAccount' => $post_data['args']['sourceAccount']
+        'Principal' => $post_data['args']['principal']
     ];
     if (isset($post_data['args']['qualifier']) && strlen($post_data['args']['qualifier']) > 0) {
         $requestArray['Qualifier'] = $post_data['args']['qualifier'];
+    }
+    if (isset($post_data['args']['sourceArn']) && strlen($post_data['args']['sourceArn']) > 0) {
+        $requestArray['SourceArn'] = $post_data['args']['sourceArn'];
+    } if (isset($post_data['args']['sourceAccount']) && strlen($post_data['args']['sourceAccount']) > 0) {
+        $requestArray['SourceAccount'] = $post_data['args']['sourceAccount'];
     }
     try {
         $awsResult = $client->addPermission($requestArray
