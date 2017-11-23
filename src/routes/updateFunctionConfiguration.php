@@ -25,19 +25,22 @@ $app->post('/api/AmazonLambda/updateFunctionConfiguration', function ($request, 
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+        'Runtime' => $post_data['args']['runtime'],
+        'Role' => $post_data['args']['role'],
+        'Handler' => $post_data['args']['handler'],
+        'Description' => $post_data['args']['description']
+    ];
+    if (isset($post_data['args']['timeout']) && $post_data['args']['timeout'] > 0) {
+        $requestArray['Timeout'] = $post_data['args']['timeout'];
+    }
+    if (isset($post_data['args']['memorySize']) && $post_data['args']['memorySize'] > 0) {
+        $requestArray['MemorySize'] = $post_data['args']['memorySize'];
+    }
     try {
-        $awsResult = $client->updateFunctionConfiguration(
-            [
-                'FunctionName' => $post_data['args']['functionName'],
-                'Runtime' => $post_data['args']['runtime'],
-                'Role' => $post_data['args']['role'],
-                'Handler' => $post_data['args']['handler'],
-                'Description' => $post_data['args']['description'],
-                'Timeout' => $post_data['args']['timeout'],
-                'MemorySize' => $post_data['args']['memorySize']
+        $awsResult = $client->getFunction($requestArray);
 
-            ]
-        );
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {

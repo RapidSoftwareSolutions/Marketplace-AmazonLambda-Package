@@ -26,11 +26,13 @@ $app->post('/api/AmazonLambda/listVersionsByFunction', function ($request, $resp
         )
     );
     $requestArray = [
-        'FunctionName' => $post_data['args']['functionName'],
-        'Marker' => $post_data['args']['marker']
+        'FunctionName' => $post_data['args']['functionName']
     ];
     if (isset($post_data['args']['maxItems']) && $post_data['args']['maxItems'] > 0) {
         $requestArray['MaxItems'] = $post_data['args']['maxItems'];
+    }
+    if (isset($post_data['args']['marker']) && strlen($post_data['args']['marker']) > 0) {
+        $requestArray['Marker'] = $post_data['args']['marker'];
     }
     try {
         $awsResult = $client->listVersionsByFunction($requestArray

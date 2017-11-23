@@ -27,11 +27,13 @@ $app->post('/api/AmazonLambda/listAliases', function ($request, $response, $args
     );
     $requestArray = [
         'FunctionName' => $post_data['args']['functionName'],
-        'FunctionVersion' => $post_data['args']['functionVersion'],
-        'Marker' => $post_data['args']['marker']
+        'FunctionVersion' => $post_data['args']['functionVersion']
     ];
     if (isset($post_data['args']['maxItems']) && $post_data['args']['maxItems'] > 0) {
         $requestArray['MaxItems'] = $post_data['args']['maxItems'];
+    }
+    if (isset($post_data['args']['marker']) && strlen($post_data['args']['marker']) > 0) {
+        $requestArray['Marker'] = $post_data['args']['marker'];
     }
     try {
         $awsResult = $client->listAliases($requestArray

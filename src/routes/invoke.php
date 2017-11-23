@@ -29,11 +29,13 @@ $app->post('/api/AmazonLambda/invoke', function ($request, $response, $args) {
         'FunctionName' => $post_data['args']['functionName'],
         'InvocationType' => $post_data['args']['invocationType'],
         'LogType' => $post_data['args']['logType'],
-        'ClientContext' => $post_data['args']['clientContext'],
-        'Payload' => $post_data['args']['payload'],
+        'ClientContext' => $post_data['args']['clientContext']
     ];
     if (isset($post_data['args']['qualifier']) && strlen($post_data['args']['qualifier']) > 0) {
         $requestArray['Qualifier'] = $post_data['args']['qualifier'];
+    }
+    if (isset($post_data['args']['payload']) && strlen($post_data['args']['payload']) > 0) {
+        $requestArray['Payload'] = $post_data['args']['payload'];
     }
     try {
         $awsResult = $client->invoke($requestArray);

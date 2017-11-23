@@ -25,11 +25,12 @@ $app->post('/api/AmazonLambda/listFunctions', function ($request, $response, $ar
             'region' => $post_data['args']['region']
         )
     );
-    $requestArray = [
-        'Marker' => $post_data['args']['marker']
-    ];
+    $requestArray = [];
     if (isset($post_data['args']['maxItems']) && $post_data['args']['maxItems'] > 0) {
         $requestArray['MaxItems'] = $post_data['args']['maxItems'];
+    }
+    if (isset($post_data['args']['marker']) && strlen($post_data['args']['marker']) > 0) {
+        $requestArray['Marker'] = $post_data['args']['marker'];
     }
     try {
         $awsResult = $client->listFunctions($requestArray);
