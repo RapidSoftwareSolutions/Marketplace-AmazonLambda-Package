@@ -8,7 +8,7 @@ $app->post('/api/AmazonLambda/createFunction', function ($request, $response, $a
 
     //checking properly formed json
     $checkRequest = $this->validation;
-    $validateRes = $checkRequest->validate($request, ['apiKey', 'apiSecret', 'version', 'region', 'functionName', 'runtime', 'role', 'handler', 'zipFile', 's3Bucket', 's3Key', 's3ObjectVersion']);
+    $validateRes = $checkRequest->validate($request, ['apiKey', 'apiSecret', 'version', 'region', 'functionName', 'runtime', 'role', 'handler', 'zipFile']);
     if (!empty($validateRes) && isset($validateRes['callback']) && $validateRes['callback'] == 'error') {
         return $response->withHeader('Content-type', 'application/json')->withStatus(200)->withJson($validateRes);
     } else {
@@ -31,10 +31,7 @@ $app->post('/api/AmazonLambda/createFunction', function ($request, $response, $a
         'Role' => $post_data['args']['role'],
         'Handler' => $post_data['args']['handler'],
         'Code' => [
-            'ZipFile' => $post_data['args']['zipFile'],
-            'S3Bucket' => $post_data['args']['s3Bucket'],
-            'S3Key' => $post_data['args']['s3Key'],
-            'S3ObjectVersion' => $post_data['args']['s3ObjectVersion']
+            'ZipFile' => file_get_contents($post_data['args']['zipFile'])
         ]
     ];
     if (isset($post_data['args']['description']) && strlen($post_data['args']['description']) > 0) {

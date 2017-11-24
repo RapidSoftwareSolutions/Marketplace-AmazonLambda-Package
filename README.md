@@ -2,7 +2,7 @@
 
 # AmazonLambda Package
 AWS Lambda is a compute service that lets you run code without provisioning or managing servers.
-* Domain: [AmazonLambda](https://aws.amazon.com/lambda/)
+* Domain: [AmazonLambda](http://https://aws.amazon.com/lambda/)
 * Credentials: apiKey, apiSecret
 
 ## How to get credentials: 
@@ -33,7 +33,7 @@ Adds a permission to the resource policy associated with the specified AWS Lambd
 | version      | String     | Your Amazon Lambda service version
 | functionName | String     | Name of the Lambda function
 | statementId  | String     | A unique statement identifier.
-| action       | String     | The AWS Lambda action you want to allow in this statement. Each Lambda action is a string starting with "lambda:" followed by the API name (see Operations).
+| action       | String     | The AWS Lambda action you want to allow in this statement. Each Lambda action is a string starting with "lambda:" followed by the API name .
 | principal    | String     | The principal who is getting this permission. 
 | sourceArn    | String     | This is optional; however, when granting Amazon S3 permission to invoke your function, you should specify this field with the bucket Amazon Resource Name (ARN) as its value.
 | sourceAccount| String     | The AWS account ID (without a hyphen) of the source owner.
@@ -64,12 +64,31 @@ Identifies a stream as an event source for a Lambda function. It can be either a
 | version         | String     | Your Amazon Lambda service version
 | functionName    | String     | Name of the Lambda function
 | eventSourceArn  | String     | The Amazon Resource Name (ARN) of the Amazon Kinesis or the Amazon DynamoDB stream that is the event source.
-| startingPosition| Select     | Alias of the Lambda function
+| startingPosition| Select     | The position in the stream where AWS Lambda should start reading. 
 | enabled         | Select     | Indicates whether AWS Lambda should begin polling the event source. By default, Enabled is true.
 | batchSize       | Number     | The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. The default is 100 records.
 
 ## AmazonLambda.createFunction
-Creates a new Lambda function.
+Creates a new Lambda function using direct link.
+
+| Field       | Type       | Description
+|-------------|------------|----------
+| apiKey      | credentials| Your Amazon AWS_ACCESS_KEY_ID
+| apiSecret   | credentials| Your Amazon AWS_SECRET_ACCESS_KEY
+| region      | String     | Your Amazon region
+| version     | String     | Your Amazon Lambda service version
+| functionName| String     | Name of the Lambda function
+| runtime     | String     | The runtime environment for the Lambda function you are uploading.
+| role        | String     | The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources.
+| handler     | String     | The function within your code that Lambda calls to begin execution. For Node.js, it is the module-name.export value in your function. For Java, it can be package.class-name::handler or package.class-name.
+| zipFile     | String     | A base64-encoded .zip file containing your deployment package.
+| description | String     | A short, user-defined function description. Lambda does not use this value. Assign a meaningful description as you see fit.
+| timeout     | Number     | The function execution time at which Lambda should terminate the function. Because the execution time has cost implications, we recommend you set this value based on your expected execution time. The default is 3 seconds.
+| memorySize  | Number     | The amount of memory, in MB, your Lambda function is given. Lambda uses this memory size to infer the amount of CPU and memory allocated to your function. Your function use-case determines your CPU and memory requirements. For example, a database operation might need less memory compared to an image processing function. The default value is 128 MB. The value must be a multiple of 64 MB.
+| publish     | Select     | This boolean parameter can be used to request AWS Lambda to create the Lambda function and publish a version as an atomic operation.
+
+## AmazonLambda.createFunctionWithBucket
+Creates a new Lambda function using S3 bucket.
 
 | Field          | Type       | Description
 |----------------|------------|----------
@@ -81,7 +100,6 @@ Creates a new Lambda function.
 | runtime        | String     | The runtime environment for the Lambda function you are uploading.
 | role           | String     | The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources.
 | handler        | String     | The function within your code that Lambda calls to begin execution. For Node.js, it is the module-name.export value in your function. For Java, it can be package.class-name::handler or package.class-name.
-| zipFile        | String     | A base64-encoded .zip file containing your deployment package.
 | s3Bucket       | String     | Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS region where you are creating the Lambda function.
 | s3Key          | String     | The Amazon S3 object (the deployment package) key name you want to upload.
 | s3ObjectVersion| String     | The Amazon S3 object (the deployment package) version you want to upload.
@@ -215,7 +233,7 @@ Returns list of aliases created for a Lambda function.
 | maxItems       | Number     | Specifies the maximum number of aliases to return in response. This parameter value must be greater than 0.
 
 ## AmazonLambda.listEventSourceMappings
-Returns a list of event source mappings you created using the CreateEventSourceMapping (see CreateEventSourceMapping), where you identify a stream as an event source. This list does not include Amazon S3 event sources.
+Returns a list of event source mappings you created using the createEventSourceMapping , where you identify a stream as an event source. This list does not include Amazon S3 event sources.
 
 | Field         | Type       | Description
 |---------------|------------|----------

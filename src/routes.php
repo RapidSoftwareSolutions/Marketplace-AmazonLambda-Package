@@ -19,6 +19,7 @@
        'deleteFunction',
        'deleteEventSourceMapping',
        'deleteAlias',
+       'createFunctionWithBucket',
        'createFunction',
        'createEventSourceMapping',
         'addPermission',
