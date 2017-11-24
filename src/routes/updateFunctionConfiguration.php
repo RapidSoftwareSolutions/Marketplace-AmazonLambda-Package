@@ -26,12 +26,20 @@ $app->post('/api/AmazonLambda/updateFunctionConfiguration', function ($request, 
         )
     );
     $requestArray = [
-        'FunctionName' => $post_data['args']['functionName'],
-        'Runtime' => $post_data['args']['runtime'],
-        'Role' => $post_data['args']['role'],
-        'Handler' => $post_data['args']['handler'],
-        'Description' => $post_data['args']['description']
+        'FunctionName' => $post_data['args']['functionName']
     ];
+    if (isset($post_data['args']['description']) && strlen($post_data['args']['description']) > 0) {
+        $requestArray['Description'] = $post_data['args']['description'];
+    }
+    if (isset($post_data['args']['runtime']) && strlen($post_data['args']['runtime']) > 0) {
+        $requestArray['Runtime'] = $post_data['args']['runtime'];
+    }
+    if (isset($post_data['args']['role']) && strlen($post_data['args']['role']) > 0) {
+        $requestArray['Role'] = $post_data['args']['role'];
+    }
+    if (isset($post_data['args']['handler']) && strlen($post_data['args']['handler']) > 0) {
+        $requestArray['Handler'] = $post_data['args']['handler'];
+    }
     if (isset($post_data['args']['timeout']) && $post_data['args']['timeout'] > 0) {
         $requestArray['Timeout'] = $post_data['args']['timeout'];
     }
