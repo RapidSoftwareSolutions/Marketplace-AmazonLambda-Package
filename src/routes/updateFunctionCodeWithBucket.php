@@ -2,13 +2,13 @@
 
 use Aws\Lambda\LambdaClient;
 
-$app->post('/api/AmazonLambda/updateFunctionCode', function ($request, $response, $args) {
+$app->post('/api/AmazonLambda/updateFunctionCodeWithBucket', function ($request, $response, $args) {
     $settings = $this->settings;
 
 
     //checking properly formed json
     $checkRequest = $this->validation;
-    $validateRes = $checkRequest->validate($request, ['apiKey', 'apiSecret', 'version', 'region', 'functionName', 'zipFile']);
+    $validateRes = $checkRequest->validate($request, ['apiKey', 'apiSecret', 'version', 'region', 'functionName', 's3Bucket', 's3Key', 's3ObjectVersion']);
     if (!empty($validateRes) && isset($validateRes['callback']) && $validateRes['callback'] == 'error') {
         return $response->withHeader('Content-type', 'application/json')->withStatus(200)->withJson($validateRes);
     } else {
@@ -28,8 +28,10 @@ $app->post('/api/AmazonLambda/updateFunctionCode', function ($request, $response
     $requestArray = [
         'FunctionName' => $post_data['args']['functionName']
     ];
-        $requestArray['ZipFile'] = file_get_contents($post_data['args']['zipFile']);
 
+    $requestArray['S3Bucket'] = $post_data['args']['s3Bucket'];
+    $requestArray['S3Key'] = $post_data['args']['s3Key'];
+    $requestArray['S3ObjectVersion'] = $post_data['args']['s3ObjectVersion'];
     if (isset($post_data['args']['publish']) && strlen($post_data['args']['publish']) > 0) {
         $requestArray['Publish'] = $post_data['args']['publish'] == 'true' ? true : false;
     }

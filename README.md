@@ -326,7 +326,7 @@ You can update an event source mapping. This is useful if you want to change the
 | batchSize   | Number     | The largest number of records that AWS Lambda will retrieve from your event source at the time of invoking your function. Your function receives an event with all the retrieved records. The default is 100 records.
 
 ## AmazonLambda.updateFunctionCode
-Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.
+Updates the code for the specified Lambda function with direct link. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.
 
 | Field          | Type       | Description
 |----------------|------------|----------
@@ -335,7 +335,19 @@ Updates the code for the specified Lambda function. This operation must only be 
 | region         | String     | Your Amazon region
 | version        | String     | Your Amazon Lambda service version
 | functionName   | String     | Name of the Lambda function
-| zipFile        | String     | A base64-encoded .zip file containing your deployment package.
+| zipFile        | String     | A .zip file containing your deployment package.
+| publish        | Select     | This boolean parameter can be used to request AWS Lambda to create the Lambda function and publish a version as an atomic operation.
+
+## AmazonLambda.updateFunctionCodeWithBucket
+Updates the code for the specified Lambda function with s3 bucket. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.
+
+| Field          | Type       | Description
+|----------------|------------|----------
+| apiKey         | credentials| Your Amazon AWS_ACCESS_KEY_ID
+| apiSecret      | credentials| Your Amazon AWS_SECRET_ACCESS_KEY
+| region         | String     | Your Amazon region
+| version        | String     | Your Amazon Lambda service version
+| functionName   | String     | Name of the Lambda function
 | s3Bucket       | String     | Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS region where you are creating the Lambda function.
 | s3Key          | String     | The Amazon S3 object (the deployment package) key name you want to upload.
 | s3ObjectVersion| String     | The Amazon S3 object (the deployment package) version you want to upload.

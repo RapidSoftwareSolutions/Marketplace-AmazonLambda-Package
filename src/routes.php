@@ -2,6 +2,7 @@
        $routes = [
        'updateFunctionConfiguration',
        'updateFunctionCode',
+       'updateFunctionCodeWithBucket',
        'updateEventSourceMapping',
        'updateAlias',
        'removePermission',

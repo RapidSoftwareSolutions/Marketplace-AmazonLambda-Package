@@ -302,7 +302,7 @@
         {
           "name": "zipFile",
           "type": "String",
-          "info": "A base64-encoded .zip file containing your deployment package.",
+          "info": "A .zip file containing your deployment package.",
           "required": true
         },
         {
@@ -1432,7 +1432,7 @@
     },
     {
       "name": "updateFunctionCode",
-      "description": "Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.",
+      "description": "Updates the code for the specified Lambda function with direct link. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.",
       "args": [
         {
           "name": "apiKey",
@@ -1466,27 +1466,84 @@
         },
         {
           "name": "zipFile",
-          "type": "String",
-          "info": "A base64-encoded .zip file containing your deployment package.",
-          "required": false
+          "type": "File",
+          "info": "A zip file containing your deployment package.",
+          "required": true
         },
+
+        {
+          "name": "publish",
+          "type": "Select",
+          "options": [
+            "true",
+            "false"
+          ],
+          "info": "This boolean parameter can be used to request AWS Lambda to create the Lambda function and publish a version as an atomic operation.",
+          "required": false
+        }
+      ],
+      "callbacks": [
+        {
+          "name": "error",
+          "info": "Error"
+        },
+        {
+          "name": "success",
+          "info": "Success"
+        }
+      ]
+    },{
+      "name": "updateFunctionCodeWithBucket",
+      "description": "Updates the code for the specified Lambda function with s3bucket. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.",
+      "args": [
+        {
+          "name": "apiKey",
+          "type": "credentials",
+          "info": "Your Amazon AWS_ACCESS_KEY_ID",
+          "required": true
+        },
+        {
+          "name": "apiSecret",
+          "type": "credentials",
+          "info": "Your Amazon AWS_SECRET_ACCESS_KEY",
+          "required": true
+        },
+        {
+          "name": "region",
+          "type": "String",
+          "info": "Your Amazon region",
+          "required": true
+        },
+        {
+          "name": "version",
+          "type": "String",
+          "info": "Your Amazon Lambda service version",
+          "required": true
+        },
+        {
+          "name": "functionName",
+          "type": "String",
+          "info": "Name of the Lambda function",
+          "required": true
+        },
+
         {
           "name": "s3Bucket",
           "type": "String",
           "info": "Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS region where you are creating the Lambda function.",
-          "required": false
+          "required": true
         },
         {
           "name": "s3Key",
           "type": "String",
           "info": "The Amazon S3 object (the deployment package) key name you want to upload.",
-          "required": false
+          "required": true
         },
         {
           "name": "s3ObjectVersion",
           "type": "String",
           "info": "The Amazon S3 object (the deployment package) version you want to upload.",
-          "required": false
+          "required": true
         },
         {
           "name": "publish",
