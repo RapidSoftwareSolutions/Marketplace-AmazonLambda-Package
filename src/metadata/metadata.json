@@ -301,7 +301,7 @@
         },
         {
           "name": "zipFile",
-          "type": "String",
+          "type": "File",
           "info": "A .zip file containing your deployment package.",
           "required": true
         },
