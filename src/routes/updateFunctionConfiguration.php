@@ -41,10 +41,10 @@ $app->post('/api/AmazonLambda/updateFunctionConfiguration', function ($request, 
         $requestArray['Handler'] = $post_data['args']['handler'];
     }
     if (isset($post_data['args']['timeout']) && $post_data['args']['timeout'] > 0) {
-        $requestArray['Timeout'] = $post_data['args']['timeout'];
+        $requestArray['Timeout'] = (int)$post_data['args']['timeout'];
     }
     if (isset($post_data['args']['memorySize']) && $post_data['args']['memorySize'] > 0) {
-        $requestArray['MemorySize'] = $post_data['args']['memorySize'];
+        $requestArray['MemorySize'] = (int)$post_data['args']['memorySize'];
     }
     try {
         $awsResult = $client->updateFunctionConfiguration($requestArray);
