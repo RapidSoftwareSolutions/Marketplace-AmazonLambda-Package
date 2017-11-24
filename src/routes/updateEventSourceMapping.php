@@ -25,15 +25,20 @@ $app->post('/api/AmazonLambda/updateEventSourceMapping', function ($request, $re
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'UUID' => $post_data['args']['uuid'],
+    ];
+    if (isset($post_data['args']['enabled']) && strlen($post_data['args']['enabled']) > 0) {
+        $requestArray['Enabled'] = $post_data['args']['enabled'] == 'true' ? true : false;
+    }
+    if (isset($post_data['args']['batchSize']) && strlen($post_data['args']['batchSize']) > 0) {
+        $requestArray['BatchSize'] = (int)$post_data['args']['batchSize'];
+    }
+    if (isset($post_data['args']['functionName']) && strlen($post_data['args']['functionName']) > 0) {
+        $requestArray['FunctionName'] = $post_data['args']['functionName'];
+    }
     try {
-        $awsResult = $client->updateEventSourceMapping(
-            [
-                'UUID' => $post_data['args']['uuid'],
-                'FunctionName' => $post_data['args']['functionName'],
-                'Enabled' => $post_data['args']['enabled'],
-                'BatchSize' => $post_data['args']['batchSize']
-            ]
-        );
+        $awsResult = $client->updateEventSourceMapping($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {

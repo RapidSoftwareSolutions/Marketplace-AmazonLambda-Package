@@ -25,26 +25,33 @@ $app->post('/api/AmazonLambda/createFunction', function ($request, $response, $a
             'region' => $post_data['args']['region']
         )
     );
-    try {
-        $awsResult = $client->createFunction(
-            [
-                'FunctionName' => $post_data['args']['functionName'],
-                'Runtime' => $post_data['args']['runtime'],
-                'Role' => $post_data['args']['role'],
-                'Handler' => $post_data['args']['handler'],
-                'Code' =>[
-                    'ZipFile'=>$post_data['args']['zipFile'],
-                    'S3Bucket'=>$post_data['args']['s3Bucket'],
-                    'S3Key'=>$post_data['args']['s3Key'],
-                    'S3ObjectVersion'=>$post_data['args']['s3ObjectVersion']
-                ],
-                'Description' => $post_data['args']['description'],
-                'Timeout' => $post_data['args']['timeout'],
-                'MemorySize' => $post_data['args']['memorySize'],
-                'Publish' => $post_data['args']['publish']
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+        'Runtime' => $post_data['args']['runtime'],
+        'Role' => $post_data['args']['role'],
+        'Handler' => $post_data['args']['handler'],
+        'Code' => [
+            'ZipFile' => $post_data['args']['zipFile'],
+            'S3Bucket' => $post_data['args']['s3Bucket'],
+            'S3Key' => $post_data['args']['s3Key'],
+            'S3ObjectVersion' => $post_data['args']['s3ObjectVersion']
+        ]
+    ];
+    if (isset($post_data['args']['description']) && strlen($post_data['args']['description']) > 0) {
+        $requestArray['Description'] = $post_data['args']['description'];
+    }
+    if (isset($post_data['args']['timeout']) && strlen($post_data['args']['timeout']) > 0) {
+        $requestArray['Timeout'] = (int)$post_data['args']['timeout'];
+    }
+    if (isset($post_data['args']['memorySize']) && strlen($post_data['args']['memorySize']) > 0) {
+        $requestArray['MemorySize'] = (int)$post_data['args']['memorySize'];
+    }
 
-            ]
-        );
+    if (isset($post_data['args']['publish']) && strlen($post_data['args']['publish']) > 0) {
+        $requestArray['Publish'] = $post_data['args']['publish'] == 'true' ? true : false;
+    }
+    try {
+        $awsResult = $client->createFunction($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {

@@ -26,14 +26,19 @@ $app->post('/api/AmazonLambda/listEventSourceMappings', function ($request, $res
         )
     );
     $requestArray = [
-        'FunctionName' => $post_data['args']['functionName'],
-        'EventSourceArn' => $post_data['args']['eventSourceArn']
+        'FunctionName' => $post_data['args']['functionName']
     ];
     if (isset($post_data['args']['marker']) && strlen($post_data['args']['marker']) > 0) {
         $requestArray['Marker'] = $post_data['args']['marker'];
     }
+    if (isset($post_data['args']['eventSourceArn']) && strlen($post_data['args']['eventSourceArn']) > 0) {
+        $requestArray['EventSourceArn'] = $post_data['args']['eventSourceArn'];
+    }
+    if (isset($post_data['args']['maxItems']) && $post_data['args']['maxItems'] > 0) {
+        $requestArray['MaxItems'] = $post_data['args']['maxItems'];
+    }
     try {
-        $awsResult = $client->listAliases($requestArray);
+        $awsResult = $client->listEventSourceMappings($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {

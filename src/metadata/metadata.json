@@ -66,7 +66,7 @@
         {
           "name": "action",
           "type": "String",
-          "info": "The AWS Lambda action you want to allow in this statement. Each Lambda action is a string starting with \"lambda:\" followed by the API name (see Operations).",
+          "info": "The AWS Lambda action you want to allow in this statement. Each Lambda action is a string starting with \"lambda:\" followed by the API name .",
           "required": true
         },
         {
@@ -216,7 +216,7 @@
             "TRIM_HORIZON",
             "LATEST"
           ],
-          "info": "Alias of the Lambda function",
+          "info": "The position in the stream where AWS Lambda should start reading. ",
           "required": true
         },
         {
@@ -918,7 +918,7 @@
     },
     {
       "name": "listEventSourceMappings",
-      "description": "Returns a list of event source mappings you created using the CreateEventSourceMapping (see CreateEventSourceMapping), where you identify a stream as an event source. This list does not include Amazon S3 event sources.",
+      "description": "Returns a list of event source mappings you created using the createEventSourceMapping , where you identify a stream as an event source. This list does not include Amazon S3 event sources.",
       "args": [
         {
           "name": "apiKey",

@@ -39,7 +39,7 @@ $app->post('/api/AmazonLambda/updateFunctionConfiguration', function ($request, 
         $requestArray['MemorySize'] = $post_data['args']['memorySize'];
     }
     try {
-        $awsResult = $client->getFunction($requestArray);
+        $awsResult = $client->updateFunctionConfiguration($requestArray);
 
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();

@@ -25,22 +25,26 @@ $app->post('/api/AmazonLambda/createEventSourceMapping', function ($request, $re
             'region' => $post_data['args']['region']
         )
     );
+    $requestArray = [
+        'FunctionName' => $post_data['args']['functionName'],
+        'EventSourceArn' => $post_data['args']['eventSourceArn'],
+        'StartingPosition' => $post_data['args']['startingPosition']
+    ];
+    if (isset($post_data['args']['enabled']) && strlen($post_data['args']['enabled']) > 0) {
+        $requestArray['Enabled'] = $post_data['args']['enabled'] == 'true' ? true : false;
+    }
+    if (isset($post_data['args']['batchSize']) && strlen($post_data['args']['batchSize']) > 0) {
+        $requestArray['BatchSize'] = (int)$post_data['args']['batchSize'];
+    }
     try {
-        $awsResult = $client->createEventSourceMapping(
-            ['FunctionName' => $post_data['args']['functionName'],
-                'EventSourceArn' => $post_data['args']['eventSourceArn'],
-                'StartingPosition' => $post_data['args']['startingPosition'],
-                'Enabled' => $post_data['args']['enabled'],
-                'BatchSize' => $post_data['args']['batchSize']
-            ]
-        );
+        $awsResult = $client->createEventSourceMapping($requestArray);
         $result['callback'] = 'success';
         $result['contextWrites']['to'] = $awsResult->toArray();
     } catch (InvalidArgumentException $exception) {
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'API_ERROR';
         $result['contextWrites']['to']['status_msg'] = $exception->getMessage();
-    } catch (Aws\Lambda\Exception\LambdaException $exception){
+    } catch (Aws\Lambda\Exception\LambdaException $exception) {
         $result['callback'] = 'error';
         $result['contextWrites']['to']['status_code'] = 'API_ERROR';
         $result['contextWrites']['to']['status_msg'] = $exception->getMessage();
