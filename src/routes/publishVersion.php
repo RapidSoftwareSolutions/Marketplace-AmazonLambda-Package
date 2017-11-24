@@ -29,7 +29,7 @@ $app->post('/api/AmazonLambda/publishVersion', function ($request, $response, $a
         'FunctionName' => $post_data['args']['functionName'],
         'Description' => $post_data['args']['description']
     ];
-    if (isset($post_data['args']['codeSha256']) && $post_data['args']['codeSha256'] > 0) {
+    if (isset($post_data['args']['codeSha256']) && strlen($post_data['args']['codeSha256']) > 0) {
         $requestArray['CodeSha256'] = $post_data['args']['codeSha256'];
     }
 
