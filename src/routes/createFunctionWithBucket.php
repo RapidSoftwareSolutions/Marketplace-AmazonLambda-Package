@@ -39,10 +39,10 @@ $app->post('/api/AmazonLambda/createFunctionWithBucket', function ($request, $re
     if (isset($post_data['args']['description']) && strlen($post_data['args']['description']) > 0) {
         $requestArray['Description'] = $post_data['args']['description'];
     }
-    if (isset($post_data['args']['timeout']) && strlen($post_data['args']['timeout']) > 0) {
+    if (isset($post_data['args']['timeout']) && $post_data['args']['timeout'] > 0) {
         $requestArray['Timeout'] = (int)$post_data['args']['timeout'];
     }
-    if (isset($post_data['args']['memorySize']) && strlen($post_data['args']['memorySize']) > 0) {
+    if (isset($post_data['args']['memorySize']) && $post_data['args']['memorySize'] > 0) {
         $requestArray['MemorySize'] = (int)$post_data['args']['memorySize'];
     }
 
