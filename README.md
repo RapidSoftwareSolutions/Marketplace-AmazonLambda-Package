@@ -11,7 +11,6 @@ AWS Lambda is a compute service that lets you run code without provisioning or m
 2. Create new user and assign to existing group. After creating user you will see credentials
 
 
-
 ## Custom datatypes: 
  |Datatype|Description|Example
  |--------|-----------|----------
